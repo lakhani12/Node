@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Le Cercle | Sign In</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+        .glass {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+    </style>
+</head>
+<body class="bg-[#0f172a] flex items-center justify-center min-h-screen relative overflow-hidden">
+    
+    <div class="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] bg-indigo-900/20 rounded-full blur-[120px]"></div>
+    <div class="absolute bottom-[-10%] right-[-10%] w-[40%] h-[40%] bg-blue-900/20 rounded-full blur-[120px]"></div>
+
+    <div class="w-full max-w-md p-1">
+        <div class="glass rounded-2xl shadow-2xl p-10 transform transition-all duration-500 hover:scale-[1.01]">
+            <div class="text-center mb-10">
+                <span class="text-xs uppercase tracking-[0.3em] text-gray-400 font-light">The Collection</span>
+                <h2 class="text-4xl font-light text-gray-900 tracking-tight mt-2">Welcome Back</h2>
+            </div>
+
+            <form action="#" class="space-y-6">
+                <div class="space-y-1">
+                    <label class="text-[11px] uppercase tracking-wider text-gray-500 ml-1">Email Address</label>
+                    <input type="email" 
+                        class="w-full bg-gray-50 border-none px-4 py-3 rounded-xl ring-1 ring-gray-200 focus:ring-2 focus:ring-indigo-500 outline-none transition-all duration-300 placeholder:text-gray-300" 
+                        placeholder="name@example.com">
+                </div>
+
+                <div class="space-y-1">
+                    <div class="flex justify-between items-center px-1">
+                        <label class="text-[11px] uppercase tracking-wider text-gray-500">Password</label>
+                        <a href="#" class="text-[11px] uppercase tracking-wider text-indigo-600 hover:text-indigo-800 transition">Forgot?</a>
+                    </div>
+                    <input type="password" 
+                        class="w-full bg-gray-50 border-none px-4 py-3 rounded-xl ring-1 ring-gray-200 focus:ring-2 focus:ring-indigo-500 outline-none transition-all duration-300 placeholder:text-gray-300" 
+                        placeholder="••••••••">
+                </div>
+
+                <button type="submit" 
+                    class="w-full bg-gray-900 text-white text-sm uppercase tracking-widest py-4 rounded-xl font-medium hover:bg-black hover:shadow-xl active:scale-[0.98] transition-all duration-300">
+                    Enter Dashboard
+                </button>
+            </form>
+
+            <div class="mt-10 pt-6 border-t border-gray-100 text-center">
+                <p class="text-gray-400 text-xs tracking-wide">
+                    New to the circle? <a href="#" class
