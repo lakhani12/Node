@@ -30,6 +30,36 @@ app.get("/card", async(req,res)=>{
     res.render("card",{data:allusers});
 })
 
+
+// delete card
+app.get("/delete/:id", async(req,res)=>{
+    await userModel.findOneAndDelete({_id:req.params.id});
+
+    res.redirect('/card');
+});
+
+// edit card
+// 1.show old data in form --> show filed form
+app.get("/edit/:id", async(req,res)=>{
+    let user = await userModel.findOne({_id:req.params.id});
+    res.render("edit",{ user });
+});
+
+// 2.set new data --> edit form and submit form
+app.post("/edit/:id", async(req,res)=>{
+    let { fname, uname, email, img } = req.body;
+    await userModel.findOneAndUpdate({_id:req.params.id}, {
+        fullname: fname,
+        username: uname,
+        email: email,
+        Image: img
+    },
+    {new: true},
+);
+    res.redirect('/card');
+});
+
+
 app.listen(3000, ()=>{
     console.log("server is running!!!");
 })
