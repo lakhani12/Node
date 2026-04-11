@@ -22,6 +22,7 @@ let userSchema = mongoose.Schema({
     select: false, // find query -- select false --> response ma add na thay
   },
   role: {
+    type: String,
     enum: ["user", "Admin"],
     default: "user",
   },
@@ -37,14 +38,16 @@ userSchema.methods.generateAuthToken = function () {
 
 // bcrypt
 // hash(static)
-userSchema.static.hashPassword = async function () {
+userSchema.statics.hashPassword = async function (password) {
   let hash = await bcrypt.hash(password, 10);
   return hash;
 };
 
 // compare (methods)
-userSchema.methods.comparePassword = async function () {
+userSchema.methods.comparePassword = async function (password) {
   let result = await bcrypt.compare(password, this.password);
+
+  return result;
 }; //this.password --> database user's password
 
 module.exports = mongoose.model("user", userSchema);

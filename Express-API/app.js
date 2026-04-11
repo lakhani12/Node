@@ -4,11 +4,16 @@ const cors = require("cors");
 dotenv.config();
 const db = require("./config/db");
 
+// routes
+const userRotuer = require("./routes/web/v1/user.route");
+const cookieParser = require("cookie-parser");
+
 const app = express();
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.set(db());
+app.use(cookieParser());
 
 // cors origin --> allow only that website that mention into origin group , ex. backend only res when localhost 3005 send requst , other then give cores error
 // localhost 3005 --> req --> accept --> give responce
@@ -22,6 +27,7 @@ PORT = process.env.PORT;
 app.get("/", (req, res) => {
   res.status(401).json({ message: "Access denined !!" });
 });
+app.use("/user",userRotuer);//locahost
 
 app.listen(PORT, () => {
   console.log(`server is Running on PORT ${PORT}`);
