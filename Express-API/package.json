@@ -1,4 +1,15 @@
 {
+  "name": "express-api",
+  "version": "1.0.0",
+  "description": "src/\r ├── config/         🔧  Settings (DB connection, env vars, logger)\r ├── models/         🗃️  Database table shapes (Mongoose schemas)\r ├── middlewares/    🚦  Code that runs BEFORE your handler (auth, validation, rate-limit)\r ├── routes/         🗺️  URL → handler mapping (what URL calls what function)\r ├── controllers/    📬  Receives the HTTP request, sends the HTTP response\r ├── services/       🧠  The actual business logic (talks to the DB)\r └── utils/          🔨  Reusable helpers (ApiError, ApiResponse, catchAsync)",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
   "dependencies": {
     "bcrypt": "^6.0.0",
     "config": "^4.4.1",
@@ -10,18 +21,6 @@
     "express-validator": "^7.3.2",
     "jsonwebtoken": "^9.0.3",
     "mongoose": "^9.4.1",
-    "multer": "^2.1.1",
-    "nodemon": "^3.1.14"
-  },
-  "name": "express-api",
-  "version": "1.0.0",
-  "description": "src/\r ├── config/         🔧  Settings (DB connection, env vars, logger)\r ├── models/         🗃️  Database table shapes (Mongoose schemas)\r ├── middlewares/    🚦  Code that runs BEFORE your handler (auth, validation, rate-limit)\r ├── routes/         🗺️  URL → handler mapping (what URL calls what function)\r ├── controllers/    📬  Receives the HTTP request, sends the HTTP response\r ├── services/       🧠  The actual business logic (talks to the DB)\r └── utils/          🔨  Reusable helpers (ApiError, ApiResponse, catchAsync)\r ## Express API Flow\r Request → Route → (Middleware) → Controller → Service → Database\r                                                          ↓\r Response ←────────────────────────────────── Controller ←-",
-  "main": "app.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "type": "commonjs"
+    "multer": "^2.1.1"
+  }
 }

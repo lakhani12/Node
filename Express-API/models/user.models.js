@@ -2,7 +2,7 @@ const mongoose = require("mongoose");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 
-// Database Validation
+// Database  Validation
 let userSchema = mongoose.Schema({
   username: {
     type: String,
@@ -19,17 +19,17 @@ let userSchema = mongoose.Schema({
   password: {
     type: String,
     required: true,
-    select: false, // find query -- select false --> response ma add na thay
+    select: false, // find query -- select false  --> response ma add na thai
   },
   role: {
     type: String,
-    enum: ["user", "Admin"],
+    enum: ["user", "admin"],
     default: "user",
   },
 });
 
 // jwt token
-userSchema.methods.generateAuthToken = function () {
+userSchema.methods.generateAutToken = function () {
   let token = jwt.sign({ _id: this._id }, process.env.JWT_SECRET, {
     expiresIn: "7d",
   });
@@ -37,17 +37,18 @@ userSchema.methods.generateAuthToken = function () {
 }; // this._id --> database user's _id
 
 // bcrypt
-// hash(static)
+
+// hash (static)
 userSchema.statics.hashPassword = async function (password) {
   let hash = await bcrypt.hash(password, 10);
   return hash;
 };
 
-// compare (methods)
+// compare (method)
 userSchema.methods.comparePassword = async function (password) {
   let result = await bcrypt.compare(password, this.password);
 
   return result;
-}; //this.password --> database user's password
+};
 
 module.exports = mongoose.model("user", userSchema);

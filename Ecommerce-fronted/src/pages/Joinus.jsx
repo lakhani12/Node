@@ -1,55 +1,49 @@
-import React, { useState } from "react";
-import { User, Mail, Lock, Eye, EyeOff, ArrowRight } from "lucide-react";
-import { Link } from "react-router-dom";
+import React, { useState } from 'react';
+import { User, Mail, Lock, Eye, EyeOff, ArrowRight } from 'lucide-react';
+import { Link } from 'react-router-dom';
 
-const JoinUs = () => {
+const Joinus = () => {
   const [formData, setFormData] = useState({
-    username: "",
-    email: "",
-    password: "",
+    username: '',
+    email: '',
+    password: ''
   });
-
+  
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [message, setMessage] = useState({ type: "", text: "" });
+  const [message, setMessage] = useState({ type: '', text: '' });
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
-  const submitForm = () => {
-    console.log(`form submited.!!!`);
-    console.log(formData);
-  };
+const submitForm = () => {
+  console.log(`form submited.!!!`);
+  console.log(formData)
+}
   const handleRegister = async (e) => {
     e.preventDefault();
     setLoading(true);
-    setMessage({ type: "", text: "" });
+    setMessage({ type: '', text: '' });
 
     try {
       // Replace with your Node.js API endpoint
-      const response = await fetch(
-        `${import.meta.env.VITE_BASE_URL}/user/register`,
-        {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(formData),
-        },
-      );
+      const response = await fetch(`${import.meta.env.VITE_BASE_URL}/user/register`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(formData),
+      });
 
       const data = await response.json();
 
       if (response.ok) {
-        setMessage({ type: "success", text: "Registration successful!" });
-        setFormData({ username: "", email: "", password: "" });
-        localStorage.setItem("token", data.token);
+        setMessage({ type: 'success', text: 'Registration successful!' });
+        setFormData({ username: '', email: '', password: '' });
+        localStorage.setItem("token" , data.token)
       } else {
-        setMessage({
-          type: "error",
-          text: data.message || "Registration failed",
-        });
+        setMessage({ type: 'error', text: data.message || 'Registration failed' });
       }
     } catch (error) {
-      setMessage({ type: "error", text: "Server connection error." });
+      setMessage({ type: 'error', text: 'Server connection error.' });
     } finally {
       setLoading(false);
     }
@@ -64,23 +58,15 @@ const JoinUs = () => {
       <div className="max-w-md w-full z-10">
         <div className="bg-white/70 backdrop-blur-2xl border border-white rounded-3xl p-8 shadow-[0_20px_50px_rgba(0,0,0,0.05)]">
           <div className="text-center mb-8">
-            <h2 className="text-3xl font-bold text-gray-900 tracking-tight">
-              Create Account
-            </h2>
-            <p className="text-gray-500 mt-2 text-sm font-medium">
-              Register your account to get started
-            </p>
+            <h2 className="text-3xl font-bold text-gray-900 tracking-tight">Create Account</h2>
+            <p className="text-gray-500 mt-2 text-sm font-medium">Register your account to get started</p>
           </div>
 
           {/* Alert Message */}
           {message.text && (
-            <div
-              className={`mb-6 p-3 rounded-2xl text-xs font-semibold text-center animate-in fade-in slide-in-from-top-2 ${
-                message.type === "success"
-                  ? "bg-green-100 text-green-700"
-                  : "bg-red-100 text-red-700"
-              }`}
-            >
+            <div className={`mb-6 p-3 rounded-2xl text-xs font-semibold text-center animate-in fade-in slide-in-from-top-2 ${
+              message.type === 'success' ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'
+            }`}>
               {message.text}
             </div>
           )}
@@ -88,9 +74,7 @@ const JoinUs = () => {
           <form onSubmit={handleRegister} className="space-y-5">
             {/* Username Field */}
             <div>
-              <label className="block text-xs font-bold text-gray-400 uppercase tracking-widest mb-2 ml-1">
-                Username
-              </label>
+              <label className="block text-xs font-bold text-gray-400 uppercase tracking-widest mb-2 ml-1">Username</label>
               <div className="relative group">
                 <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-gray-400 group-focus-within:text-indigo-600 transition-colors">
                   <User size={18} />
@@ -109,9 +93,7 @@ const JoinUs = () => {
 
             {/* Email Field */}
             <div>
-              <label className="block text-xs font-bold text-gray-400 uppercase tracking-widest mb-2 ml-1">
-                Email Address
-              </label>
+              <label className="block text-xs font-bold text-gray-400 uppercase tracking-widest mb-2 ml-1">Email Address</label>
               <div className="relative group">
                 <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-gray-400 group-focus-within:text-indigo-600 transition-colors">
                   <Mail size={18} />
@@ -130,9 +112,7 @@ const JoinUs = () => {
 
             {/* Password Field */}
             <div>
-              <label className="block text-xs font-bold text-gray-400 uppercase tracking-widest mb-2 ml-1">
-                Password
-              </label>
+              <label className="block text-xs font-bold text-gray-400 uppercase tracking-widest mb-2 ml-1">Password</label>
               <div className="relative group">
                 <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-gray-400 group-focus-within:text-indigo-600 transition-colors">
                   <Lock size={18} />
@@ -167,10 +147,7 @@ const JoinUs = () => {
               ) : (
                 <>
                   Create Account
-                  <ArrowRight
-                    size={18}
-                    className="group-hover:translate-x-1 transition-transform"
-                  />
+                  <ArrowRight size={18} className="group-hover:translate-x-1 transition-transform" />
                 </>
               )}
             </button>
@@ -178,15 +155,11 @@ const JoinUs = () => {
 
           <div className="mt-8 text-center">
             <p className="text-gray-500 text-sm font-medium">
-              Already have an account?{" "}
+              Already have an account?{' '}
               <Link to="/login">
-                <button
-                  onClick={submitForm}
-                  className="text-indigo-600 font-bold hover:underline underline-offset-4"
-                >
-                  Login
-                </button>
-              </Link>
+              <button onClick={submitForm} className="text-indigo-600 font-bold hover:underline underline-offset-4">
+                Login
+              </button></Link>
             </p>
           </div>
         </div>
@@ -195,4 +168,4 @@ const JoinUs = () => {
   );
 };
 
-export default JoinUs;
+export default Joinus;

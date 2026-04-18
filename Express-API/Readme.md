@@ -7,12 +7,13 @@ src/
 ├── controllers/    📬  Receives the HTTP request, sends the HTTP response
 ├── services/       🧠  The actual business logic (talks to the DB)
 └── utils/          🔨  Reusable helpers (ApiError, ApiResponse, catchAsync)
+
 ## Express API Flow
 Request → Route → (Middleware) → Controller → Service → Database
                                                          ↓
-Response ←────────────────────────────────── Controller ←-
+Response ←────────────────────────────────── Controller ←─
 
-## Backend  Data Flow
+## Backend Data Flow
 1. Request arrives at Express
         ↓
 2. app.js runs Helmet (security headers)
@@ -36,7 +37,8 @@ Response ←──────────────────────�
         ↓
 10. Controller sends: 201 { success: true, data: { ... }, message: "Product created" }
 
-# API Created
-1.user register --> post  --> user name,password,email
-2.user login  -> post --> email,password
-user profile-->get
+
+## Api Created
+1. user register --> post --> username, password, email
+2. user login --> post --> email, password
+3. user profile --> get 

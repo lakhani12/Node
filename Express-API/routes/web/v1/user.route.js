@@ -1,21 +1,22 @@
 const express = require("express");
 const { body } = require("express-validator");
 const userController = require("../../../controllers/user.controller");
-const middleware = require("../../../middlewares/user.middleware")
+const middleware = require("../../../middlewares/user.middleware");
 
 const router = express.Router();
+
 // register user
-// second valication -- use express validator package
+// secound validation -- use express validator package
 router.post(
   "/register",
   [
     body("username")
       .isLength({ min: 4 })
-      .withMessage("username must be 4 character long"),
-    body("email").isEmail({ min: 4 }).withMessage("enter valid Email"),
+      .withMessage("username must be 4 characters long"),
+    body("email").isEmail().withMessage("enter valid email"),
     body("password")
       .isLength({ min: 6 })
-      .withMessage("password must be 6 charactor long"),
+      .withMessage("password must be 6 characters long"),
   ],
   userController.registerUser,
 );
@@ -24,14 +25,26 @@ router.post(
 router.post(
   "/login",
   [
-    body("email").isEmail().withMessage("Enter valid Email"),
-    body("password")
-      .isLength({ min: 6 })
-      .withMessage("Password must be 6 Character Long"),
+    body("email")
+      .isEmail()
+      .withMessage(
+        "Enter Valid Email",
+        body("password")
+          .isLength({ min: 6 })
+          .withMessage("Password Must be 6 chaecters long"),
+      ),
   ],
   userController.loginUser,
 );
 
-router.get("/profile",middleware.authUser, userController.profile);
+// show profile
+router.get("/profile", middleware.authUser, userController.profile);
+
+// logout profile
+router.get("/logout", middleware.authUser, userController.logout);
+
+// update profile
+router.put("/update", middleware.authUser, userController.updateUser);
+
 
 module.exports = router;
