@@ -1,31 +1,42 @@
-require("dotenv").config();
-//dependencies
+const dotenv = require("dotenv");
+dotenv.config();
 const express = require("express");
-const app = express();
-const port = process.env.PORT || 3002;
 const cors = require("cors");
-const cookieParser = require("cookie-parser");
+const db = require("./configs/db");
+const cookieParser = require("cookie-parser")
+// Route
 const userRouter = require("./routes/web/v1/user.route")
-const db = require("./config/db")
-// Middlewares
-app.use(cookieParser())
+const adminRouter = require("./routes/web/v1/admin.route")
+const productRouter = require("./routes/web/v1/product.route")
+const chatRouter = require("./routes/web/v1/chat.route")
+
+const app = express();
+
 app.use(express.json());
-app.use(express.urlencoded({extended : true}));
-app.set(db());
+app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser())
-app.use(cors({origin : "http://localhost:5173" , credentials : true}));
+app.set(db());
 
-// cors origin --> allows you that website that mention into origin group , ex. bakend only res when localhost 3000 and send request , other than give cors error 
+
+//cors origin --> allow only that website that mention into origin group, ex. backend only res when localhost 3000 send request, other than give cors error
 // localhost 3000 --> req --> accept --> give response
-// localhost 3002 --> req --> cors error  --> don't give response
-// in origin you mention frontends urls (developments , productions , both)
+// localhost 3001 --> req --> cors error --> don't give response
+// in origin you mention frontend urls (development, production both)
+app.use(cors({ origin: "http://localhost:3002", credentials: true }))
+
+PORT = process.env.PORT;
 
 
-//Routes
-app.use("/user" , userRouter );
+// temp route --> in Backend we Don't create a home Route. after Testing / Development Remove Home Route
+app.get("/", (req, res) => {
+    res.status(401).json({ message: "Access Denied !" });
+});
 
+app.use("/user", userRouter); //--> localhost:3002/user/register
+app.use("/admin", adminRouter)// --> url/admin/all/user
+app.use("/product", productRouter); //--> localhost:3002/product/all
+app.use("/bot", chatRouter); //--> localhost:3002/chat
 
-app.listen(port, () => {
-  console.log(`server run at port ${port}`);
-  console.log(`http://localhost:${port}/`);
+app.listen(PORT, () => {
+    console.log(`Server Is Running On PORT ${PORT}`)
 });

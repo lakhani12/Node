@@ -1,78 +1,81 @@
 const userService = require("../services/user.service");
-const { validationResult } = require("express-validator");
-const userModel = require("../models/user.models");
+const { validationResult, check } = require("express-validator");
+const userModel = require("../models/user.model")
 
 module.exports.registerUser = async (req, res) => {
-  const error = validationResult(req);
+    const error = validationResult(req);
 
-  if (!error.isEmpty()) {
-    return res.status(400).json({ error: error.array() });
-  }
+    if (!error.isEmpty()) {
+        return res.status(400).json({ error: error.array() })
+    }
 
-  const { username, email, password } = req.body;
+    const { username, email, password, role } = req.body;
 
-  //check user is alredy registed or not
-  let isExist = await userModel.findOne({ email: email });
-  if (isExist) {
-    return res.status(400).json({ message: "user is already register" });
-  }
+    // check user is already registred or not
+    let isExist = await userModel.findOne({ email: email });
 
-  const hashPassword = await userModel.hashPassword(password);
+    if (isExist) {
+        return res.status(400).json({ error: [{ msg: "User is Already Register" }] })
+    }
 
-  const user = await userService.createUser({
-    username,
-    email,
-    password: hashPassword,
-  });
+    const hashPassword = await userModel.hashPassword(password);
 
-  let token = await user.generateAutToken();
+    const user = await userService.createUser(
+        {
+            username,
+            email,
+            password: hashPassword,
+            role
+        })
 
-  res.status(200).json({ token, user });
-};
+    let token = await user.generateAuthToken();
+
+    res.status(200).json({ token, user });
+}
 
 module.exports.loginUser = async (req, res) => {
-  let error = validationResult(req);
+    let error = validationResult(req);
 
-  if (!error.isEmpty()) {
-    return res.status(400).json({ error: error.array() });
-  }
+    if (!error.isEmpty()) {
+        return res.status(400).json({ error: error.array() });
+    }
 
-  const { email, password } = req.body;
+    const { email, password } = req.body;
 
-  let checkUser = await userModel.findOne({ email: email }).select("+password");
+    let checkUser = await userModel.findOne({ email: email }).select('+password');
 
-  if (!checkUser) {
-    return res.status(401).json({ message: "User Not Found" });
-  }
-  const isMatch = await checkUser.comparePassword(password);
+    if (!checkUser) {
+        return res.status(401).json({ error: [{ msg: "Email is invalid" }] })
+    }
 
-  if (!isMatch) {
-    return res.status(400).json({ message: "Worng Password" });
-  }
+    const isMatch = await checkUser.comparePassword(password);
 
-  const token = checkUser.generateAutToken();
-  res.cookie("token", token);
+    if (!isMatch) {
+        return res.status(400).json({ message: "Wrong Password" })
+    }
 
-  res.status(200).json({ token, checkUser });
-};
+    const token = await checkUser.generateAuthToken();
+    res.cookie("token", token);
+
+    res.status(200).json({ token, checkUser });
+}
 
 module.exports.profile = (req, res) => {
-  console.log(req.user);
-  res.status(200).json({ user: req.user });
-};
+    res.status(200).json({ user: req.user });
+}
 
 module.exports.logout = (req, res) => {
-  res.cookie("token", "");
-  res.status(200).json({ message: "User logout Successfully" });
-};
+    res.clearCookie("token")
+    res.status(200).json({ message: "User Logout Successfully !" });
+}
 
-module.exports.updateUser = async (req, rse) => {
-  const userId = req.user.id;
-  console.log(userId);
+module.exports.updateUser = async (req, res) => {
+    const userId = req.user.id;
+    console.log(userId);
 
-  const { username, email } = req.body;
+    const { username, email } = req.body;
 
-  const updateUser = await userService.updateUser({ userId, username, email });
+    const updateUser = await userService.updateUser({ userId, username, email });
 
-  rse.status(200).json({ message: "user Updated Successfully", updateUser });
-};
+    res.status(200).json({ message: "User Data Updated Successfully !", updateUser })
+}
