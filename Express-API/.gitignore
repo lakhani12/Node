@@ -1,0 +1,6 @@
+# Ignore environment variables files
+.env
+.env.*
+!.env.example
+node_modules
+dist

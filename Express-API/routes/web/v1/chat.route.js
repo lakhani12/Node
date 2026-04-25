@@ -6,5 +6,4 @@ const chatController = require("../../../controllers/chat.controller");
 // router --> service --> controller --> call into router
 router.post("/chat", userMiddleware.authUser, chatController.botReply);
 
-
 module.exports = router;

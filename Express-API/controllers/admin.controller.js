@@ -29,22 +29,25 @@ module.exports.deleteUser = async (req, res) => {
   }
 };
 
-// update role
-module.exports.userRoleUpdate = async (req, res) => {
+// update user role
+module.exports.updateUserRole = async (req, res) => {
   try {
     const userId = req.params.id;
     const { role } = req.body;
 
-    if (!req.user.role !== "admin") {
-      return res.status(403).json({ message: "Access Denied" });
+    if (req.body.role === "admin") {
+      return res.status(400).json({ message: "Access Denied !" });
     }
 
-    const user = await adminService.userRoleUpdate({ userId, role });
+    const user = await adminService.updateUserRole({ userId, role });
 
-    if(!user){
-      throw new Error("User Not Found");
+    if (!user) {
+      throw new Error("User Not Found !");
     }
-    return res.status(200).json({ message: "User Role Updated Successfully !", user });
+
+    return res
+      .status(200)
+      .json({ message: "User Role Update Successfully !", user });
   } catch (error) {
     return res.status(400).json({ message: error.message });
   }

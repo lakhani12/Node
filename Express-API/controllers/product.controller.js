@@ -39,7 +39,6 @@ module.exports.createProduct = async (req, res) => {
     .json({ message: "Product Created Successfully !", product });
 };
 
-
 // all products
 module.exports.AllProducts = async (req, res) => {
   try {
@@ -67,6 +66,7 @@ module.exports.singleProduct = async (req, res) => {
     return res.status(400).json({ message: error.message });
   }
 };
+
 // update product
 module.exports.updateProduct = async (req, res) => {
   const productId = req.params.id;
@@ -104,12 +104,16 @@ module.exports.updateProduct = async (req, res) => {
 module.exports.deleteProduct = async (req, res) => {
   try {
     const productId = req.params.id;
+    
     const deletedProduct = await productService.deleteProduct(productId);
-    if (!deletedProduct) {
+
+    if(!deletedProduct){
       return res.status(404).json({ message: "Product Not Found !" });
     }
-    return res.status(200).json({ message: "Product Deleted Successfully !", deletedProduct });
+
+    return res.status(200).json({ message: "Product Deleted Successfully !" });
+
   } catch (error) {
     return res.status(400).json({ message: error.message });
   }
-};
+}

@@ -23,11 +23,12 @@ router.delete(
 );
 
 // update role -- create manager
+// router -- service -- controller -- call into router
 router.put(
   "/user/:id/role",
   usermiddleware.authUser,
   middleware.authAdmin,
-  adminController.userRoleUpdate,
+  adminController.updateUserRole,
 );
 
 module.exports = router;

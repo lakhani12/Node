@@ -55,8 +55,8 @@ module.exports.AllProducts = async () => {
 };
 
 // update product
-module.exports.updateProduct = async (
-  productid,
+module.exports.updateProduct = async ({
+  productId,
   name,
   description,
   stock,
@@ -67,9 +67,9 @@ module.exports.updateProduct = async (
   images,
   brand,
   category,
-) => {
+}) => {
   const updatedProduct = await productModel.findOneAndUpdate(
-    { _id: productid },
+    { _id: productId },
     {
       name,
       description,
@@ -95,4 +95,4 @@ module.exports.updateProduct = async (
 // delete product
 module.exports.deleteProduct = async (id) => {
   return await productModel.findOneAndDelete({ _id: id });
-  }
+};

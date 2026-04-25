@@ -19,20 +19,18 @@ router.post(
 // authUser --> check user is login or not? ==> if login then --> req.user (give you back)
 // authAdmin ==> req.user ==> check role ==> Admin or not? --> jump to next router
 
-// single product
-router.get(
-  "/:id",
-  usermiddleware.authUser,
-  adminmiddleware.authAdmin,
-  productController.singleProduct,
-);
-
 // all products
 router.get(
   "/all",
   usermiddleware.authUser,
-  adminmiddleware.authAdmin,
   productController.AllProducts,
+);
+
+// single product
+router.get(
+  "/:id",
+  usermiddleware.authUser,
+  productController.singleProduct,
 );
 
 // update product

@@ -7,33 +7,95 @@ const nodemailer = require("nodemailer");
 // third validation --> check all field are not blank
 
 module.exports.createUser = async ({ username, email, password, role }) => {
-    if (!username || !email || !password) {
-        throw new Error("All Field Are Required");
-    }
-    const user = await userModel.create({ username, email, password, role });
+  if (!username || !email || !password) {
+    throw new Error("All Field Are Required");
+  }
+  const user = await userModel.create({ username, email, password, role });
 
-    return user;
-}
+  return user;
+};
 
 // update data
 module.exports.updateUser = async ({ userId, username, email }) => {
-    const updatedUser = await userModel.findOneAndUpdate(
-        { _id: userId },
-        { username, email },
-        { new: true }
-    )
+  const updatedUser = await userModel.findOneAndUpdate(
+    { _id: userId },
+    { username, email },
+    { new: true },
+  );
 
-    if (!updatedUser) {
-        throw new Error("User Not Found");
-    }
+  if (!updatedUser) {
+    throw new Error("User Not Found");
+  }
 
-    return updatedUser;
+  return updatedUser;
 };
+
 // forget password
 const transporter = nodemailer.createTransport({
-    service: "gmail",
-    auth: {
-        user: process.env.EMAIL,
-        pass: process.env.PASSWORD
-    }
+  host: "smtp.gmail.com",
+  port: 587,
+  secure: false,
+  auth: {
+    user: process.env.NODE_EMAIL,
+    pass: process.env.NODE_PASSWORD,
+  },
 });
+
+module.exports.forgetPassword = async (email) => {
+  const user = await userModel.findOne({ email });
+
+  if (!user) {
+    throw new Error("User Not Found !");
+  }
+
+  const token = crypto.randomBytes(32).toString("hex");
+  console.log(token);
+  user.resetToken = token;
+  user.resetTokenExpiration = Date.now() + 15 * 60 * 1000; // 15 minutes
+  // create reset Token Expiry time = generate link data and time + extra 15 minutes
+  // token will be validation only 15 minutes, after 15 minutes token will be expire and you can't reset your password
+
+  await user.save();
+
+  const resetLink = `http://localhost:3000/reset-password?token=${token}`;
+  // resetLink = frontend page link that show newPassword filed with chnage password button
+
+  await transporter.sendMail({
+    to: email,
+    subject: "Reset Your Password",
+    html: `<div style="font-family: Arial, sans-serif; line-height: 1.6; color: #333; max-width: 600px; margin: 0 auto; padding: 20px; border: 1px solid #ddd; border-radius: 10px;">
+        <h2 style="color: #007bff;">Reset Your Password</h2>
+        <p>Hi there,</p>
+        <p>We received a request to reset your password. If you didn't make this request, you can safely ignore this email.</p>
+
+        <div style="text-align: center; margin: 30px 0;">
+            <a href="${resetLink}" 
+               style="display: inline-block; padding: 15px 25px; background-color: #007bff; color: #ffffff; text-decoration: none; border-radius: 5px; font-weight: bold;">
+               Reset My Password
+            </a>
+        </div>
+
+        <p>This link will expire in 30 minutes for security reasons.</p>
+        <p>Best regards,The Support Team</p>
+    </div>`,
+  });
+};
+
+module.exports.resetPassword = async ({token, newPassword}) => {
+  const user = await userModel.findOne({
+    resetToken: token,
+    resetTokenExpiration: { $gt: Date.now() }, // check token expiry time is greater than current time
+  });
+
+  if (!user) {
+    throw new Error("Link Expire, Send new Request!");
+  }
+
+  const hashPassword = await userModel.hashPassword(newPassword);
+  
+  user.password = hashPassword;
+  user.resetToken = undefined;
+  user.resetTokenExpiration = undefined;
+  await user.save();
+
+};

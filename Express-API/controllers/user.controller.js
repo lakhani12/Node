@@ -79,3 +79,27 @@ module.exports.updateUser = async (req, res) => {
 
     res.status(200).json({ message: "User Data Updated Successfully !", updateUser })
 }
+
+// forget password --> send email for reset password link
+module.exports.forgetPassword = async (req, res) => {
+    const { email } = req.body;
+
+    try {
+        await userService.forgetPassword( email );
+        return res.status(200).json({ message: "Reset Password Link Sent to Your Email !" })
+    } catch (error) {
+        return res.status(400).json({ error: error.message });
+    }
+}
+
+module.exports.resetPassword = async (req, res) => {
+    try {
+        const { token } = req.params;
+        const { newPassword } = req.body;
+
+        await userService.resetPassword({ token, newPassword });
+        return res.status(200).json({ message: "Password Reset Successfully !" });
+    } catch (error) {
+        return res.status(400).json({ error: error.message });
+    }
+}

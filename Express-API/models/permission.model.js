@@ -4,7 +4,7 @@ let managerSchema = new mongoose.Schema(
   {
     username: { type: String, required: true, minlength: 5 },
     email: { type: String, required: true, unique: true },
-    password: { type: String, required: true, minlength: 8 },
+    password: { type: String, required: true, minlength: 6 },
     rights: [
       {
         name: { type: String, minlength: 3 },
